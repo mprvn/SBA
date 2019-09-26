@@ -1,0 +1,44 @@
+pipeline {
+	triggers {
+        pollSCM('H 15 * * *')
+    }
+
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
+    }
+    
+   stage('Checkout from SCM GIT') {
+     checkout([$class: 'GitSCM', branches: [[name: '*/master']], 
+              doGenerateSubmoduleConfigurations: false, extensions: [], 
+              submoduleCfg: [], 
+              userRemoteConfigs: [[url: 'https://github.com/mprvn/SBA.git']]])
+     echo 'Git checkout succeeded'
+   }
+   
+   stage('Build Docker Image') {
+      // Build image from Docker File path
+      sh 'docker build -f "./sba/projectmanager/Dockerfile" -t fsddocker/project-manager-io:"$BUILD_NUMBER" ./project-manager-project/'
+  	  sh 'docker build -f "./sba/projectmanagerspa/Dockerfile" -t fsddocker/project-manager-spa:"$BUILD_NUMBER" ./project-manager-spa/'
+   }
+   
+   stage('Pushing Image into Docker Hub') {
+	   	withCredentials([string(credentialsId: 'docker-pwd', variable: 'DockerPwd')]) {
+	    	sh "docker login -u fsddocker -p ${DockerPwd}"
+		}
+		
+   		sh 'docker push fsddocker/project-manager-io:"$BUILD_NUMBER"'
+   		sh 'docker push fsddocker/project-manager-spa:"$BUILD_NUMBER"
+   }
+   
+   stage('Run Docker container') {
+   	
+   	  //Remove existing containers
+      sh 'docker ps --format "{{.ID}}" --filter name=project-manager-IO | sort -u | xargs docker rm -f'
+      sh 'docker ps --format "{{.ID}}" --filter name=project-manager-SPA | sort -u | xargs docker rm -f'
+      sh 'docker ps --format "{{.ID}}" --filter name=dokcer-mysql | sort -u | xargs docker rm -f'
+      
+      sh 'docker run -p 3306:3306 --name docker-mysql -e MYSQL_ROOT_PASSWORD=admin -e MYSQL_DATABASE=pass@word1 -e MYSQL_USER=admin -e MYSQL_PASSWORD=pass@word1 -d mysql:latest'
+      sh 'docker run -p 9090:9090 --name project-manager-boot --link docker-mysql:mysql -d project-manager-io:"$BUILD_NUMBER"'
+      sh 'docker run -p 8080:8080 --name project-manager-spa --link project-manager-boot -d project-mgr-boot:"$BUILD_NUMBER"'
+   }
+}
