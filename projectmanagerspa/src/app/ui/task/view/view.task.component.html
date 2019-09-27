@@ -1,0 +1,111 @@
+<div class="container-fluid">
+  <div class="animateDiv row">
+    <div class="col-md-6">
+      <div class="form-group row">
+        Task:
+        <div class="col-sm-10">
+          <input type="text" name="task" [(ngModel)]="filterByName" class="form-control" id="filterByName">
+        </div>
+      </div>
+    </div>
+    <div class="col-md-5">
+      <div class="form-group row">
+        Parent Task:
+        <div class="col-sm-8">
+          <input type="text" name="parentTask" [(ngModel)]="filterByParentTask" class="form-control"
+            id="filterByParentTask">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-sm-6">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group row">
+            Priority From:
+            <div class="col-sm-6">
+              <input type="number" placeholder="From"  maxlength="2" class="form-control"
+                name="priorityFrom" [(ngModel)]="filterByPriorityFrom" id="filterByPriorityFrom">
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-5">
+          <div class="form-group row">
+            Priority To:
+            <div class="col-sm-7">
+              <input type="number" placeholder="To"  maxlength="2" class="form-control"
+                name="priorityTo" [(ngModel)]="filterByPpriorityTo" id="filterByPriorityTo">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group row">
+            Start Date:
+            <div class="col-sm-7">
+              <input type="date"  placeholder="start" name="startDate" [(ngModel)]="filterByStartDate" class="form-control"
+                id="filterByStartDate">
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group row">
+            End Date:
+            <div class="col-sm-7">
+              <input type="date" placeholder="end" name="endDate" [(ngModel)]="filterByEndDate" class="form-control" id="filterByEndDate">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+<div class="card-body row">
+  <table class="table table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <!-- <th scope="col">ID</th> -->
+        <th scope="col">Task</th>
+        <th scope="col">Parent Task</th>
+        <th scope="col">Priority</th>
+        <th scope="col">Start Date</th>
+        <th scope="col">End Date</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody class="tbody">
+      <tr *ngFor="let t of tasks | filterTasks : filterByName 
+                                                : filterByParentTask
+                                                : filterByPriorityFrom
+                                                : filterByPriorityTo
+                                                : filterByStartDate
+                                                : filterByEndDate">
+
+        <!-- <td>{{t.id}}</td> -->
+        <td>{{t.task}}</td>
+        <td>{{t.parentTask?t.parentTask.task: null}}</td>
+        <td>{{t.priority}}</td>
+        <td>{{t.startDate | date:"dd-MM-yyyy"}}</td>
+        <td>{{t.endDate | date:"dd-MM-yyyy"}}</td>
+        <td>
+          <button type="button" class="btn btn-primary mr-3"  [disabled] = isExpired(t)
+            (click)="update(t)">Edit</button>
+          <button type="button" class="btn btn-primary" [disabled] = isExpired(t)  
+            (click)="finishTask(t)">End Task</button>
+           <!--<button type="button" class="btn btn-primary"  *ngIf="!isActive(t)" (click)="delete(t)">Delete</button>   -->
+               </td>
+        <td>
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,17 @@
+#animateDiv {
+    width: 100px;
+    height: 100px;
+    background-color: #EDE6E3;
+    color: white;
+    -webkit-animation: mymove 5s infinite; /* Safari 4.0 - 8.0 */
+    animation: mymove 5s infinite;
+  }
+  
+  /* Safari 4.0 - 8.0 */
+  @-webkit-keyframes mymove {
+    50% {box-shadow: 10px 20px 30px #69A3F7;}
+  }
+  
+  @keyframes mymove {
+    50% {box-shadow: 10px 20px 30px #398DF5;}
+  }
