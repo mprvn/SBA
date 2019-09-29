@@ -35,7 +35,7 @@
   }
   
   .btn-default:hover {
-    color: rgb(255, 255, 255);
+    color: rgba(255, 255, 255);
     background: rgba(108, 88, 179, 0.75);
     border: 2px solid rgba(108, 89, 179, 0.75);
   }
@@ -96,8 +96,8 @@
   
   .btn-success:hover {
     color: #FFF;
-    background: rgb(103, 192, 103, 0.75);
-    border: 2px solid rgb(103, 192, 103, 0.75);
+    background: rgba(103, 192, 103, 0.75);
+    border: 2px solid rgba(103, 192, 103, 0.75);
   }
   
   .btn-info {
@@ -132,7 +132,7 @@
   
   .btn-warning:hover {
     color: #FFF;
-    background: rgb(240, 173, 78, 0.75);
+    background: rgba(240, 173, 78, 0.75);
     border: 2px solid rgba(240, 173, 78, 0.75);
   }
   
