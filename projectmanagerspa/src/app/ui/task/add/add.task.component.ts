@@ -5,6 +5,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TaskService } from 'src/app/service/task.service';
 import { Validator } from '@angular/forms';
 import { DatePipe } from '@angular/common';
+import { ProjectService } from "src/app/service/project.service";
+import { UserService } from "src/app/service/user.service";
+import { Project } from "src/app/model/project";
+import { User } from "src/app/model/user";
 
 @Component({
   selector: 'app-add-task',
@@ -18,10 +22,15 @@ export class AddTaskComponent implements OnInit {
   parentTask: ParentTask;
   parentId: number;
   parentTaskName: String;
+  users: User[];
+  projects: Project[];
   parentName: string;
   parentTaskList = [] as ParentTask[];
   projectName: string;
   parentmap = [];
+  projectId: number;
+  userName: string;
+  userId: number;
   errorMsg: any;
   isParentTask: boolean;
   today = new Date();
@@ -31,6 +40,8 @@ export class AddTaskComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private taskService: TaskService,
+    private projectService: ProjectService,
+    private userService: UserService,
     private datePipe: DatePipe) {
 
     this.task = new Task();
@@ -95,6 +106,16 @@ export class AddTaskComponent implements OnInit {
     this.task.parentTask = ptask;
   }
 
+   loadUsers() {
+    this.userService.getAllUsers().then(value => this.users = value);
+  }
+
+  loadProjects(): void {
+    this.projectService.getAllProjects().then(value => {
+      this.projects = value;
+    });
+  }
+
   resetParentTask(parentTask: ParentTask) {
     if (parentTask && !parentTask.id) {
       this.parentId = this.parentSelect.nativeElement.value;
@@ -116,6 +137,25 @@ export class AddTaskComponent implements OnInit {
       this.task.startDate = this.formatDate(this.today);
       this.task.endDate = this.formatDate(this.todayPlusOne);
     }
+  }
+
+
+  onUserSelected() {
+    this.users = this.users.filter(user => {
+      if (user.employeeId == this.userId) {
+        this.userName = user.firstName + '-' + user.lastName;
+      }
+  });
+     this.task.userId = this.userId;
+  }
+
+  onProjectSelected() {
+    this.projects = this.projects.filter(project => {
+      if (project.id == this.projectId) {
+        this.projectName = project.project;
+      }
+  });
+     this.task.projId = this.projectId;
   }
 
   public validateForm() {
