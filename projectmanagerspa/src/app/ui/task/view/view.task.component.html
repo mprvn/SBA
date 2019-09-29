@@ -1,72 +1,52 @@
-<div class="container-fluid">
-  <div class="animateDiv row">
-    <div class="col-md-6">
-      <div class="form-group row">
-        Task:
-        <div class="col-sm-10">
-          <input type="text" name="task" [(ngModel)]="filterByName" class="form-control" id="filterByName">
-        </div>
-      </div>
-    </div>
-    <div class="col-md-5">
-      <div class="form-group row">
-        Parent Task:
-        <div class="col-sm-8">
-          <input type="text" name="parentTask" [(ngModel)]="filterByParentTask" class="form-control"
-            id="filterByParentTask">
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <div class="row mt-4">
-    <div class="col-sm-6">
-      <div class="row">
-        <div class="col-sm-6">
-          <div class="form-group row">
-            Priority From:
-            <div class="col-sm-6">
-              <input type="number" placeholder="From"  maxlength="2" class="form-control"
-                name="priorityFrom" [(ngModel)]="filterByPriorityFrom" id="filterByPriorityFrom">
+<div class="container">
+    <div class = "row p-4">
+       Project:
+            <div class="col-sm-3">
+                <input #project="ngModel" [(ngModel)]="projectName" class="form-control" name="project" type="text" [disabled]="true" placeholder="Project Name" required/>
             </div>
-          </div>
-        </div>
-        <div class="col-sm-5">
-          <div class="form-group row">
-            Priority To:
-            <div class="col-sm-7">
-              <input type="number" placeholder="To"  maxlength="2" class="form-control"
-                name="priorityTo" [(ngModel)]="filterByPpriorityTo" id="filterByPriorityTo">
-            </div>
-          </div>
-        </div>
+            <button type="button" class="btn btn-primary" data-toggle="modal" (click) = "loadProjects()"  data-target="#projectSearch">
+                    Search
+            </button>
+            <div class="col sort-filter">Sort Task By:</div>
+            <button type="button" class="btn btn-primary btn-sm mr-3" (click)="sortByStartDate()">Start Date</button>
+            <button type="button" class="btn btn-primary btn-sm mr-3" (click)="sortByEndDate()">End Date</button>
+            <button type="button" class="btn btn-primary btn-sm mr-3" (click)="sortByPriority()">Priority</button>
+            <button type="button" class="btn btn-primary btn-sm mr-3" (click)="sortByCompleted()">Completed</button>
+            <button type="button" class="btn btn-primary mr-3" (click) = "resetFilter()">Reset</button>
       </div>
-    </div>
-    <div class="col-sm-6">
-      <div class="row">
-        <div class="col-sm-6">
-          <div class="form-group row">
-            Start Date:
-            <div class="col-sm-7">
-              <input type="date"  placeholder="start" name="startDate" [(ngModel)]="filterByStartDate" class="form-control"
-                id="filterByStartDate">
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-6">
-          <div class="form-group row">
-            End Date:
-            <div class="col-sm-7">
-              <input type="date" placeholder="end" name="endDate" [(ngModel)]="filterByEndDate" class="form-control" id="filterByEndDate">
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
+      <!--Project modal -->
 
+<div class="modal fade" id="projectSearch" tabindex="-1" role="dialog" aria-labelledby="projectSearchTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="projectModa">Search Project</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <!-- Search Projects-->
+            <div class="form-group row" >
+                   Project:
+                    <div class="col-sm-7">
+                        <select class="form-control" id="projectName" name="projectName" [(ngModel)]="projectId">
+                            <option *ngFor="let project of projects" value="{{project.id}}">{{project.project}}</option>
+                        </select>
+                    </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" (click) = "onProjectSelected()">Save</button>
+        </div>
+        </div>
+    </div>
 </div>
+  </div>
 <div class="card-body row">
   <table class="table table-striped">
     <thead class="thead-dark">
@@ -82,12 +62,7 @@
       </tr>
     </thead>
     <tbody class="tbody">
-      <tr *ngFor="let t of tasks | filterTasks : filterByName 
-                                                : filterByParentTask
-                                                : filterByPriorityFrom
-                                                : filterByPriorityTo
-                                                : filterByStartDate
-                                                : filterByEndDate">
+      <tr *ngFor="let t of filteredTasks">
 
         <!-- <td>{{t.id}}</td> -->
         <td>{{t.task}}</td>
@@ -109,3 +84,5 @@
     </tbody>
   </table>
 </div>
+
+

@@ -11,6 +11,8 @@ import { FormsModule, FormBuilder } from "@angular/forms";
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { UserComponent } from './user/user.component';
 import { FilterTasksPipe } from "src/app/util/filter-tasks.pipe";
+import { ProjectComponent } from './project/project.component';
+import { ProjectPipe } from "src/app/util/project.pipe";
 
 
 @NgModule({
@@ -22,7 +24,9 @@ import { FilterTasksPipe } from "src/app/util/filter-tasks.pipe";
     ViewTaskComponent,
     EditTaskComponent,
     UserComponent,
-    FilterTasksPipe
+    FilterTasksPipe,
+    ProjectPipe,
+    ProjectComponent
   ],
   imports: [
     CommonModule,
@@ -31,7 +35,7 @@ import { FilterTasksPipe } from "src/app/util/filter-tasks.pipe";
     HttpClientModule
   ],
   providers: [
-    DatePipe, FormBuilder
+    DatePipe, FormBuilder, ProjectPipe
   ],
   exports: [
     LayoutComponent

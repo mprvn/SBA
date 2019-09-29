@@ -1,0 +1,194 @@
+<div class="container-fulid">
+        <div class="form-group row">
+                <div *ngIf="!!(errorMsg)" class="alert alert-danger" role="alert"> {{ errorMsg }} </div>
+            </div>
+    <form class="card">
+        <div class=" col-12 mr-3 ml-3 pr-3 p-3 pt-3">
+            <div class=" text-center">
+                <div class="form-group row">
+                    Project:
+                    <div class="col-sm-9">
+                        <input #projectName="ngModel" [(ngModel)]="project.project" class="form-control" name="projectName" type="text" placeholder="Project Name"
+                            required/>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-sm-4">
+                        <div class="form-check date-label">
+                            <input type="checkbox" class="form-check-input"
+                             (ng-model)="isDateChecked" id="dateChecked" 
+                             [checked]="isDateChecked" (change)="changeChkBox($event)"> 
+                                                        Set Start and End Date
+                        </div>
+                    </div>
+                    <div class="col-sm-7">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                Start Date:
+                                <div >
+                                    <input #startDate="ngModel" [(ngModel)]="project.startDate" style="width:175px" [disabled]=!isDateChecked class="form-control"
+                                        name="stDate" type="date" />
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                End Date:
+                                <div >
+                                    <input #endDate="ngModel" [(ngModel)]="project.endDate" style="width:175px" [disabled]=!isDateChecked class="form-control"
+                                        name="etDate" type="date" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <br/>
+                </div>
+
+                <div class="form-group row">
+                    Priority: <span class="pl-2 pr-2 pb-2">{{project.priority}}</span>
+                    <div class="col-sm-5">
+                        <input #priority="ngModel" [(ngModel)]="project.priority" class="form-control slider" min="0" max="30" step="1" name="priority"
+                            type="range" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    Manager:
+                    <div class="col-sm-5">
+                        <input #manager="ngModel" [(ngModel)]="userName" class="form-control" name="manager" type="text" [disabled]="true" placeholder="Manager Name"
+                            required/>
+                    </div>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" (click)="loadUsers()" data-target="#searchUser">
+                      Search User
+              </button>
+                </div>
+
+                <!-- Modal to select user-->
+                <div class="modal fade" id="searchUser" tabindex="-1" role="dialog" aria-labelledby="searchUserTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="searchUserTitle">Search User</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Search Users-->
+                                <div class="form-group row" *ngIf="users?.length > 0">
+                                    <label for="inputUser" class="col-sm-2 col-form-label">User:</label>
+                                    <div class="col-sm-7">
+                                        <select class="form-control" id="userName" name="userName" [(ngModel)]="userId">
+                             <option *ngFor="let user of users" value="{{user.employeeId}}">{{user.firstName}} - {{user.lastName}}</option>
+                          </select>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="onUserSelected()">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End ModalUser selection -->
+
+                <!-- Displaying error message Option-->
+                
+
+                <div class="col-md-4 text-center">
+                    <button type="button" class="btn btn-primary mr-3" *ngIf="!isUpdate" (click)="onSubmit()">Add</button>
+                    <button type="button" class="btn btn-primary mr-3" *ngIf="isUpdate" (click)="onUpdate()">Update</button>
+                    <button type="reset" class="btn btn-primary mr-3" (click)="reset()">Reset</button>
+                </div>
+                <div><br/></div>
+            </div>
+        </div>
+    </form>
+
+    <div class="row">
+        <br/><br/>
+    </div>
+
+    <!-- List Of Projects-->
+    <div class="card-body row text-left col-12">
+        <!-- Filter Section-->
+        <div>
+            <div class="row">
+                <div class="col-filter"><label for="filterByProject">Search</label></div>
+                <div class="col-sm-7"><input type="text" size="40" [(ngModel)]="filterByProject" name="searchFilter" class="form-control" id="filterByProject"></div>
+            </div><br/>
+            <div class="row">
+                <div class="col col-filter"><label for="userFilter">Sort:</label></div>
+                <button type="button" class="btn btn-primary btn-sm mr-3" (click)="sortByStartDate()">Start Date</button>
+                <button type="button" class="btn btn-primary btn-sm mr-3" (click)="sortByEndDate()">End Date</button>
+                <button type="button" class="btn btn-primary btn-sm mr-3" (click)="sortByPriority()">Priority</button>
+                <button type="button" class="btn btn-primary btn-sm mr-3" (click)="sortByCompleted()">Completed</button>
+                <button type="button" class="btn btn-primary btn-sm mr-3" (click)="resetFilter()">Reset</button>
+
+            </div>
+        </div>
+
+        <table class="table table-hover align-san">
+            <tbody class="tbody">
+                <tr *ngFor="let p of filteredProjects | projectFilter : filterByProject">
+                    <td>
+                        <table class="inner-table">
+                            <tr>
+                                <td colspan="2"><b>Project:</b> {{p.project}}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td><b>No of Tasks:</b> {{p.countOfTasks}}</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td><b>Completed:</b> {{p.countOfCompletedTasks}}</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td><b>Start Date:</b> {{p.startDate}}</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td><b>End Date:</b> {{p.endDate}}</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table class="inner-table">
+                            <tr>
+                                <td><b>Priority</b></td>
+                            </tr>
+                            <tr>
+                                <td>{{p.priority}}</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-primary mr-3" [disabled]=isProjectExpired(p) (click)="update(p)">Update</button>
+                        <button type="button" class="btn btn-primary" [disabled]=isProjectExpired(p) (click)="suspend(p)">Suspend</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

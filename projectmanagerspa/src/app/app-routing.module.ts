@@ -3,6 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { AddTaskComponent } from "src/app/ui/task/add/add.task.component";
 import { EditTaskComponent } from "src/app/ui/task/edit/edit.task.component";
 import { ViewTaskComponent } from "src/app/ui/task/view/view.task.component";
+import { UserComponent } from "src/app/ui/user/user.component";
+import { ProjectComponent } from "src/app/ui/project/project.component";
 
 
 const routes: Routes = [
@@ -20,9 +22,18 @@ const routes: Routes = [
     component: EditTaskComponent
   },
   {
+    path: 'project',
+    component: ProjectComponent
+  },
+  {
+    path: 'user',
+    component: UserComponent
+  },
+  {
     path: 'viewtask',
     component: ViewTaskComponent
   }
+  
 ];
 
 @NgModule({

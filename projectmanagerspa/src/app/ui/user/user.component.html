@@ -1,1 +1,90 @@
-<p>user works!</p>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <form>
+                <div class="col-12">
+                    <div class="form-group row">
+                        FirstName: <span class="pl-2 pr-2 pb-2"></span>
+                        <div class="col-sm-5">
+                            <input #firstName="ngModel" [(ngModel)]="user.firstName" class="form-control" name="firstName" type="text" placeholder="First Name"
+                                required/>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        LastName: <span class="pl-2 pr-2 pb-2"></span>
+                        <div class="col-sm-5">
+                            <input #lastName="ngModel" [(ngModel)]="user.lastName" class="form-control" name="lastName" type="text" placeholder="Last Name"
+                                required/>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        Employee Id:
+                        <div class="col-sm-2">
+                            <input #empId="ngModel" [(ngModel)]="user.employeeId" [disabled]=i sUpdate class="form-control" (keypress)="numberOnly($event)"
+                                minlength="1" maxlength="9" name="empId" type="text" required/>
+                        </div>
+                    </div>
+                <div class="row">
+                    
+                    <div class="col-sm-6 text-right">
+                        <button type="button" class="btn btn-primary mr-3" *ngIf="!isUpdate" (click)="onSubmit()">Add</button>
+                        <button type="button" class="btn btn-primary mr-3" *ngIf="isUpdate" (click)="onUpdate()">Update</button>
+                        <button type="reset" class="btn btn-primary mr-3" (click)="reset()">Reset</button>
+                    </div>
+                </div>
+                </div>
+            </form>
+        </div>
+    </div>
+<div class="row"> 
+<div class="col-sm-12"> 
+    <hr style="border: 2px solid black;"/>
+</div>
+</div>
+
+    <!-- List Of Users-->
+    <div class="card-body row text-left col-12">
+        <!-- Filter Section-->
+        <div class="row">
+             <div class="col-sm-5">
+            <input type="text" size="40" [(ngModel)]="searchFilter" 
+            placeholder="Search..." name="searchFilter" 
+            class="form-control" id="searchFilter" (ngModelChange) = "search()"></div>
+            <div class="col">
+                <br/><br/>
+            </div>
+        </div>
+        <div class="san col-md-5">
+            Sort: <span class="pl-2 pr-2 pb-2"></span><button type="button" class="btn btn-primary btn-sm mr-3" (click)="sortFirstName( )">FirstName</button>
+            <button type="button" class="btn btn-primary btn-sm mr-3" (click)="sortLastName()">LastName</button>
+            <button type="button" class="btn btn-primary btn-sm ml-3" (click)="sortEmpId()">Id</button>
+        </div>
+
+        <table class="table table-hover align-san">
+            <tbody class="tbody">
+                <tr *ngFor="let u of filteredUsers">
+                    <td colspan="8">
+                        <table class="inner-table user-table " cellspacing="2px" >
+                            <tr>
+                                <td><b>Emp ID:</b> {{u.employeeId}}</td>
+                            </tr>
+                            <tr>
+                                <td><b>First Name:</b> {{u.firstName}}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Last Name:</b> {{u.lastName}}</td>
+                            </tr>
+                        </table>
+
+                    </td>
+                    <td colspan="4">
+                        <button type="button" class="btn btn-primary mr-3" (click)="update(u)">Edit</button>
+                        <button type="button" class="btn btn-primary" (click)="delete(u)">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

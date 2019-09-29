@@ -3,6 +3,7 @@ import { Task } from 'src/app/model/task';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TaskService } from 'src/app/service/task.service';
 import * as  moment from 'moment';
+import { ParentTask } from "src/app/model/parent-task";
 
 @Component({
   selector: 'app-edit-task',
@@ -13,7 +14,10 @@ export class EditTaskComponent implements OnInit {
   task: Task;
   today: any;
   parentId: number;
-  parentName: string;
+  projectName: string;
+  projectId: number;
+  parentTaskName: string;
+  parentTaskList = [] as ParentTask[];
   errorMsg: any;
   startDt: Date;
 
@@ -23,6 +27,7 @@ export class EditTaskComponent implements OnInit {
     private taskService: TaskService) {
     this.task = new Task();
     this.today = moment().format('YYYY-MM-DD');
+    this.loadParentTasks()
   }
 
   ngOnInit() {
@@ -30,14 +35,37 @@ export class EditTaskComponent implements OnInit {
     this.taskService.getTask(taskId).then(value => {
       this.task = value;
       this.startDt = this.task.startDate;
-      if (!this.task.parentTask) {
+      if (this.task.parentTask) {
         this.parentId = this.task.parentTask.id;
-        this.parentName = this.task.parentTask.task;
+        this.parentTaskName = this.task.parentTask.task;
+      }
+      if (this.task.project) {
+        this.projectId = this.task.project.id;
+        this.projectName = this.task.project.project;
+      }
+
+    });
+  }
+
+  loadParentTasks() {
+    this.taskService.getAllParentTasks().then(
+      value => this.parentTaskList = value
+    );
+  }
+
+  parentSelection(parentID) {
+    this.parentTaskList.filter(parent => {
+      if (parent.id == this.parentId) {
+        this.parentTaskName = parent.task;
+        this.updateParentTask();
       }
     });
   }
 
-
+  updateParentTask() {
+    this.task.parentTask.id = this.parentId;
+    this.task.parentTask.task = this.parentTaskName;
+  }
   onSubmit() {
     if (!this.validateForm()) {
       return false;
@@ -45,13 +73,13 @@ export class EditTaskComponent implements OnInit {
 
     this.taskService.updateTask(this.task.id, this.task)
       .then(
-        value => {
-          this.router.navigate(['./viewtask']);
-        }
+      value => {
+        this.router.navigate(['./viewtask']);
+      }
       );
   }
 
-  
+
 
   onCancel() {
     this.router.navigate(['./viewtask']);
@@ -59,7 +87,7 @@ export class EditTaskComponent implements OnInit {
 
   public validateForm() {
     const t = new Date();
-    const today = new Date(t.getFullYear(), t.getMonth(), t.getDate() );
+    const today = new Date(t.getFullYear(), t.getMonth(), t.getDate());
     const tmpEndDate = this.task.endDate == null ? undefined : this.task.endDate;
     const endDate = new Date(tmpEndDate);
     const startDate = new Date(this.task.startDate);
