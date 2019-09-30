@@ -162,5 +162,20 @@ public class TaskManagerControllerTest {
         return mapper.writeValueAsBytes(object);
     }
 	
+	@Test
+	public void findTaskByProject() throws Exception {
+		Task task = new Task(1, "Test Task 1", 
+				             valueOf(now()), false, valueOf(now().plusDays(10)), 
+				             5, new ParentTask(1, "Parent Task 1"));
+		
+		when(service.findTaskByProject(1)).thenReturn(asList(task));
+		
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/tasks/projects/1")
+				.accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
+				.andExpect(MockMvcResultMatchers.status().isOk());
+		
+	}
+
+	
 	
 }

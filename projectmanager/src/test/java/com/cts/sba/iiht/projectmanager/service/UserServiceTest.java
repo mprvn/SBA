@@ -70,6 +70,12 @@ public class UserServiceTest {
 		final User user = new User(1, "test user", "lastname");
 		service.addUser(user);
 	}
+	
+	@Test 
+	public void addUserNull() {
+		final User user = null;
+		service.addUser(user);
+	}
 
 	@Test
 	public void deleteUser() {

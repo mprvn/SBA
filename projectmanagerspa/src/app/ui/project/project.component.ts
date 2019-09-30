@@ -48,6 +48,7 @@ export class ProjectComponent implements OnInit {
 
   update(p: Project): void {
    this.scrollTop();
+   this.errorMsg = '';
     this.isUpdate = true;
     this.project.id = p.id;
     this.project.project = p.project;

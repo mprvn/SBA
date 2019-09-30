@@ -3,18 +3,12 @@ package com.cts.sba.iiht.projectmanager.service;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -22,6 +16,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.cts.sba.iiht.projectmanager.entity.ParentTask;
 import com.cts.sba.iiht.projectmanager.entity.Task;
 import com.cts.sba.iiht.projectmanager.entity.User;
+import com.cts.sba.iiht.projectmanager.repository.ParentTaskRepository;
+import com.cts.sba.iiht.projectmanager.repository.ProjectRepository;
 import com.cts.sba.iiht.projectmanager.repository.TaskManagerRepository;
 import com.cts.sba.iiht.projectmanager.repository.UserRepository;
 
@@ -36,6 +32,12 @@ public class TaskManagerServiceTest {
 	private UserRepository userRepo;
 	@Autowired
 	private UserService service;
+	@Autowired
+	private ProjectRepository  projectRepo;
+	@Autowired
+	private ParentTaskRepository  parentTaskRepo;
+	@Autowired
+	private TaskManagerRepository taskRepo ;
 	
 	
 	@Test
@@ -83,6 +85,19 @@ public class TaskManagerServiceTest {
         taskService.addTask(task);
     }
     
+    @Test()
+    public void addTaskALL() {
+        final Task task = new Task();
+        task.setTask("super Test");
+        task.setStartDate(new Date());
+        task.setPriority(1);
+        task.setEndDate(new Date());
+        task.setParentTask(parentTaskRepo.findById(1).get());
+        task.setUserId(101);
+        taskService.addTask(task);
+        List<Task> tasks = taskRepo.findByTask("super Test");
+    }
+    
     @Test(expected = javax.validation.ConstraintViolationException.class)
     public void addTaskTest() {
         final Task task = new Task();
@@ -108,6 +123,6 @@ public class TaskManagerServiceTest {
 	User user = service.findUserByTask(1);
 	assertNotNull(user);
 	}
-	
-  
+    
+     
 }

@@ -144,4 +144,9 @@ export class ViewTaskComponent implements OnInit {
       new Date(b.endDate).getTime() - new Date(a.endDate).getTime()
     );
   }
+
+  
+  filterReset() {
+    this.getTasks();
+  }
 }

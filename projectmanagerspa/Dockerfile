@@ -11,6 +11,6 @@ RUN npm run build
 
 #stage 2
 FROM nginx:alpine
-COPY --from=node /app/dist/taskmanager /usr/share/nginx/html
-COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=node /app/dist/projectmanagerspa /usr/share/nginx/html
+COPY ./nginx/defaut.conf /etc/nginx/conf.d/default.conf
 

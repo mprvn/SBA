@@ -110,6 +110,12 @@ public class Project {
 	public void setCountOfCompletedTasks(Integer countOfCompletedTasks) {
 		this.countOfCompletedTasks = countOfCompletedTasks;
 	}
+	
+	
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 	public Project(Integer id, @NotNull String project, Date startDate, Date endDate, Integer priority) {
 		super();

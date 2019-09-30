@@ -12,5 +12,10 @@ public class ProjectmanagerApplicationTests {
 	@Test
 	public void contextLoads() {
 	}
+	
+	@Test
+	public void mainMethod() {
+		ProjectmanagerApplication.main(new String[] {});
+	}
 
 }

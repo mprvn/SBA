@@ -114,12 +114,6 @@ public class TaskManagerService {
 	}
 
 
-	/*
-	 * private void updateUserTaskOnDelete(Task task) { List<User> users =
-	 * userRepo.findByTaskId(task.getId()); if(!CollectionUtils.isEmpty(users)) {
-	 * for (User user : users) { user.setTask(null); userRepo.saveAndFlush(user); }
-	 * } }
-	 */
 
 	/**
 	 * 
@@ -147,7 +141,7 @@ public class TaskManagerService {
 	 * 
 	 * @param task
 	 */
-	private void setProject(Task task) {
+	public void setProject(Task task) {
 		if (task.getProjId() != null) {
 			Optional<Project> optProject = projectRepo.findById(task.getProjId());
 			if (optProject.isPresent()) {
@@ -176,7 +170,7 @@ public class TaskManagerService {
 	 * 
 	 * @param task
 	 */
-	private void setUser(Task task) {
+	public void setUser(Task task) {
 		if (task.getUserId() != null) {
 			Optional<User> optUser = userRepo.findById(task.getUserId());
 			if (optUser.isPresent()) {

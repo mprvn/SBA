@@ -3,12 +3,16 @@ package com.cts.sba.iiht.projectmanager.entity;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Size;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "USERS")
@@ -26,12 +30,14 @@ public class User {
 	
 	 
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "PROJECT_ID")
+	@JoinColumn(name = "PROJECT_ID",foreignKey = @ForeignKey(name = "FK_USER_PROJECT"))
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Project project;
 	
 	 
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "TASK_ID" )
+	@JoinColumn(name = "TASK_ID" ,foreignKey = @ForeignKey(name = "FK_USER_TASK"))
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Task task;
 
 	public Integer getEmployeeId() {

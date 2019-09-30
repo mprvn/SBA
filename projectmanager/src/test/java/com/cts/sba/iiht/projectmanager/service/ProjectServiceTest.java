@@ -49,10 +49,14 @@ public class ProjectServiceTest {
     @Test
     public void addProject() {
     	Project project = new Project(1, "Project 1", 
-	             valueOf(now()), valueOf(now().plusDays(10)), 
+	             valueOf(now()), null, 
+	             5);
+    	Project project2 = new Project(1, "Project 1", 
+	             valueOf(now()), null, 
 	             5);
     	
         service.addProject(project);
+        service.addProject(project2);
     }
     
     @Test

@@ -35,20 +35,23 @@ public class ProjectService {
 		return projectRepo.findAll();
 	}
 	
+	public static Predicate<Task> taskCompleted() {
+		return task -> task.getEndDate().before(new Date());
+	}
 	/**
 	 * 
 	 * @return
 	 */
 	public List<Project> findAllProjectsWithTask() {
 		 List<Project> projects = new ArrayList<>();
-		 Predicate<Task> isCompleted = ct -> ct.getEndDate() != null && ct.getEndDate().before(new Date());
+		 
 		 projectRepo.findAll().stream().forEach(p -> {
 			 Project project = new Project(p.getId(), p.getProject(), 
 					 					   p.getStartDate(), p.getEndDate(), 
 					 					   p.getPriority());
 			 List<Task> noOfTasks = retrieveTasksByProject(p.getId());
 			 project.setCountOfTasks(noOfTasks.size());
-			 project.setCountOfCompletedTasks((int)noOfTasks.stream().filter(isCompleted).count());
+			 project.setCountOfCompletedTasks((int)noOfTasks.stream().filter(ProjectService.taskCompleted()).count());
 							 
 			 projects.add(project);
 		 });
