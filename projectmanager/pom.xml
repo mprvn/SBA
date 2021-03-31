@@ -18,7 +18,7 @@
 		<java.version>1.8</java.version>
 		<docker.image.prefix>yuram</docker.image.prefix>
 		<springfox-swagger.version>2.9.2</springfox-swagger.version>
-        <guava.version>26.0-jre</guava.version>
+        <guava.version>29.0-jre</guava.version>
 	</properties>
 
 	<dependencies>
